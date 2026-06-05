@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Flash do Celular</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            padding: 50px;
+        }
+        #flashControl {
+            font-size: 24px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2c2c2c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #status {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Controle de Flash do Celular</h1>
+    <button id="flashControl">Ligar Flash</button>
+    <p id="status">Status: Desligado</p>
+
+    <script>
+        const flashControlButton = document.getElementById('flashControl');
+        const statusElement = document.getElementById('status');
+        let isFlashOn = false;
+
+        flashControlButton.addEventListener('click', () => {
+            isFlashOn = !isFlashOn;
+            if (isFlashOn) {
+                flashControlButton.textContent = 'Desligar Flash';
+                statusElement.textContent = 'Status: Ligado';
+                // Aqui você pode adicionar o código para ligar o flash do celular
+                // Por exemplo, usando a API de mídia do navegador
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(stream => {
+                        const videoTrack = stream.getVideoTracks()[0];
+                        videoTrack.applyConstraints({ brightness: 1.0 });
+                    })
+                    .catch(err => {
+                        console.error('Erro ao acessar a câmera:', err);
+                    });
+            } else {
+                flashControlButton.textContent = 'Ligar Flash';
+                statusElement.textContent = 'Status: Desligado';
+                // Aqui você pode adicionar o código para desligar o flash do celular
+                // Por exemplo, usando a API de mídia do navegador
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(stream => {
+                        const videoTrack = stream.getVideoTracks()[0];
+                        videoTrack.applyConstraints({ brightness: 0.0 });
+                    })
+                    .catch(err => {
+                        console.error('Erro ao acessar a câmera:', err);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
